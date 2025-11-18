@@ -1,0 +1,152 @@
+{
+  "puppet_task_version": 1,
+  "supports_noop": false,
+  "description": "Execute the entire Ansible role imperatively",
+  "input_method": "environment",
+  "parameters": {
+    "ansible_managed": {
+      "description": "",
+      "type": "Optional[String]"
+    },
+    "item": {
+      "description": "",
+      "type": "Optional[String]"
+    },
+    "certbot_auto_renew": {
+      "description": "Certbot auto-renew cron job configuration (for certificate renewals).",
+      "type": "Optional[Boolean]"
+    },
+    "certbot_auto_renew_user": {
+      "description": "Ansible role variable (default: {{ ansible_user | default(lookup('env', 'USER')) }})",
+      "type": "Optional[String]"
+    },
+    "certbot_auto_renew_hour": {
+      "description": "Ansible role variable (default: 3)",
+      "type": "Optional[String]"
+    },
+    "certbot_auto_renew_minute": {
+      "description": "Ansible role variable (default: 30)",
+      "type": "Optional[String]"
+    },
+    "certbot_auto_renew_options": {
+      "description": "Ansible role variable (default: --quiet)",
+      "type": "Optional[String]"
+    },
+    "certbot_testmode": {
+      "description": "",
+      "type": "Optional[Boolean]"
+    },
+    "certbot_hsts": {
+      "description": "",
+      "type": "Optional[Boolean]"
+    },
+    "certbot_create_if_missing": {
+      "description": "Parameters used when creating new Certbot certs.",
+      "type": "Optional[Boolean]"
+    },
+    "certbot_create_method": {
+      "description": "Ansible role variable (default: standalone)",
+      "type": "Optional[String]"
+    },
+    "certbot_create_extra_args": {
+      "description": "Ansible role variable (default: )",
+      "type": "Optional[String]"
+    },
+    "certbot_admin_email": {
+      "description": "Ansible role variable (default: email@example.com)",
+      "type": "Optional[String]"
+    },
+    "certbot_expand": {
+      "description": "",
+      "type": "Optional[Boolean]"
+    },
+    "certbot_webroot": {
+      "description": "Default webroot, overwritten by individual per-cert webroot directories",
+      "type": "Optional[String]"
+    },
+    "certbot_certs": {
+      "description": "Ansible role variable (default: [])",
+      "type": "Optional[Array]"
+    },
+    "certbot_create_command": {
+      "description": "Ansible role variable (default: {{ certbot_script }} certonly --{{ certbot_create_method  }} {{ '--hsts' if certbot_hsts else '' }} {{ '--test-cert' if certbot_testmode else '' }} --noninteractive --agree-tos --email {{ cert_item.email | default(certbot_admin_email) }} {{ '--expand' if certbot_expand else '' }} {{ '--webroot-path ' if certbot_create_method == 'webroot'  else '' }} {{ cert_item.webroot | default(certbot_webroot) if certbot_create_method == 'webroot' else '' }} {{ certbot_create_extra_args }} --cert-name {{ cert_item_name }} -d {{ cert_item.domains | join(',') }} {{ '--expand' if certbot_expand else '' }} {{ '--pre-hook /etc/letsencrypt/renewal-hooks/pre/stop_services'\n  if certbot_create_standalone_stop_services and certbot_create_method == 'standalone'\nelse '' }} {{ '--post-hook /etc/letsencrypt/renewal-hooks/post/start_services'\n  if certbot_create_standalone_stop_services and certbot_create_method == 'standalone'\nelse '' }} {{ \"--deploy-hook '\" ~ cert_item.deploy_hook ~ \"'\"\n  if 'deploy_hook' in cert_item\nelse '' }})",
+      "type": "Optional[String]"
+    },
+    "certbot_create_standalone_stop_services": {
+      "description": "Ansible role variable (default: [\"nginx\"])",
+      "type": "Optional[Array]"
+    },
+    "certbot_install_method": {
+      "description": "Available options: 'package', 'snap', 'source'.",
+      "type": "Optional[String]"
+    },
+    "certbot_repo": {
+      "description": "Source install configuration.",
+      "type": "Optional[String]"
+    },
+    "certbot_version": {
+      "description": "Ansible role variable (default: master)",
+      "type": "Optional[String]"
+    },
+    "certbot_keep_updated": {
+      "description": "Ansible role variable (default: true)",
+      "type": "Optional[Boolean]"
+    },
+    "certbot_dir": {
+      "description": "Where to put Certbot when installing from source.",
+      "type": "Optional[String]"
+    },
+    "par_tags": {
+      "description": "An array of Ansible tags to execute (optional)",
+      "type": "Optional[Array[String]]"
+    },
+    "par_skip_tags": {
+      "description": "An array of Ansible tags to skip (optional)",
+      "type": "Optional[Array[String]]"
+    },
+    "par_start_at_task": {
+      "description": "The name of the task to start execution at (optional)",
+      "type": "Optional[String]"
+    },
+    "par_limit": {
+      "description": "Limit playbook execution to specific hosts (optional)",
+      "type": "Optional[String]"
+    },
+    "par_verbose": {
+      "description": "Enable verbose output from Ansible (optional)",
+      "type": "Optional[Boolean]"
+    },
+    "par_check_mode": {
+      "description": "Run Ansible in check mode (dry-run) (optional)",
+      "type": "Optional[Boolean]"
+    },
+    "par_timeout": {
+      "description": "Timeout in seconds for playbook execution (optional)",
+      "type": "Optional[Integer]"
+    },
+    "par_user": {
+      "description": "Remote user to use for Ansible connections (optional)",
+      "type": "Optional[String]"
+    },
+    "par_env_vars": {
+      "description": "Additional environment variables for ansible-playbook execution (optional)",
+      "type": "Optional[Hash]"
+    }
+  },
+  "implementations": [
+    {
+      "name": "paw_ansible_role_certbot.sh",
+      "requirements": [
+        "shell"
+      ],
+      "input_method": "environment"
+    },
+    {
+      "name": "paw_ansible_role_certbot.ps1",
+      "requirements": [
+        "powershell"
+      ],
+      "input_method": "environment"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+---
+- name: Execute ansible_role_certbot role
+  hosts: localhost
+  connection: local
+  gather_facts: true
+  roles:
+  - role: "."
+    tags:
+    - all

@@ -1,0 +1,31 @@
+---
+paw_ansible_role_certbot::certbot_auto_renew: true
+paw_ansible_role_certbot::certbot_auto_renew_user: "{{ ansible_user | default(lookup('env',
+  'USER')) }}"
+paw_ansible_role_certbot::certbot_auto_renew_hour: '3'
+paw_ansible_role_certbot::certbot_auto_renew_minute: '30'
+paw_ansible_role_certbot::certbot_auto_renew_options: "--quiet"
+paw_ansible_role_certbot::certbot_testmode: false
+paw_ansible_role_certbot::certbot_hsts: false
+paw_ansible_role_certbot::certbot_create_if_missing: false
+paw_ansible_role_certbot::certbot_create_method: standalone
+paw_ansible_role_certbot::certbot_create_extra_args: ''
+paw_ansible_role_certbot::certbot_admin_email: email@example.com
+paw_ansible_role_certbot::certbot_expand: false
+paw_ansible_role_certbot::certbot_webroot: "/var/www/letsencrypt"
+paw_ansible_role_certbot::certbot_certs: []
+paw_ansible_role_certbot::certbot_create_command: |-
+  {{ certbot_script }} certonly --{{ certbot_create_method  }} {{ '--hsts' if certbot_hsts else '' }} {{ '--test-cert' if certbot_testmode else '' }} --noninteractive --agree-tos --email {{ cert_item.email | default(certbot_admin_email) }} {{ '--expand' if certbot_expand else '' }} {{ '--webroot-path ' if certbot_create_method == 'webroot'  else '' }} {{ cert_item.webroot | default(certbot_webroot) if certbot_create_method == 'webroot' else '' }} {{ certbot_create_extra_args }} --cert-name {{ cert_item_name }} -d {{ cert_item.domains | join(',') }} {{ '--expand' if certbot_expand else '' }} {{ '--pre-hook /etc/letsencrypt/renewal-hooks/pre/stop_services'
+    if certbot_create_standalone_stop_services and certbot_create_method == 'standalone'
+  else '' }} {{ '--post-hook /etc/letsencrypt/renewal-hooks/post/start_services'
+    if certbot_create_standalone_stop_services and certbot_create_method == 'standalone'
+  else '' }} {{ "--deploy-hook '" ~ cert_item.deploy_hook ~ "'"
+    if 'deploy_hook' in cert_item
+  else '' }}
+paw_ansible_role_certbot::certbot_create_standalone_stop_services:
+- nginx
+paw_ansible_role_certbot::certbot_install_method: package
+paw_ansible_role_certbot::certbot_repo: https://github.com/certbot/certbot.git
+paw_ansible_role_certbot::certbot_version: master
+paw_ansible_role_certbot::certbot_keep_updated: true
+paw_ansible_role_certbot::certbot_dir: "/opt/certbot"
