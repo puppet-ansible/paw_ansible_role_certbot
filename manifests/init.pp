@@ -76,50 +76,50 @@ class paw_ansible_role_certbot (
 # Execute the Ansible role using PAR (Puppet Ansible Runner)
 # Playbook synced via pluginsync to agent's cache directory
 # Check for common paw::par_vardir setting, then module-specific, then default
-  $_par_vardir = $par_vardir ? {
-    undef   => lookup('paw::par_vardir', Stdlib::Absolutepath, 'first', '/opt/puppetlabs/puppet/cache'),
-    default => $par_vardir,
-  }
-  $playbook_path = "${_par_vardir}/lib/puppet_x/ansible_modules/ansible_role_certbot/playbook.yml"
+$_par_vardir = $par_vardir ? {
+  undef   => lookup('paw::par_vardir', Stdlib::Absolutepath, 'first', '/opt/puppetlabs/puppet/cache'),
+  default => $par_vardir,
+}
+$playbook_path = "${_par_vardir}/lib/puppet_x/ansible_modules/ansible_role_certbot/playbook.yml"
 
-  par { 'paw_ansible_role_certbot-main':
-    ensure        => present,
-    playbook      => $playbook_path,
-    playbook_vars => {
-      'ansible_managed'                         => $ansible_managed,
-      'item'                                    => $item,
-      'certbot_auto_renew'                      => $certbot_auto_renew,
-      'certbot_auto_renew_user'                 => $certbot_auto_renew_user,
-      'certbot_auto_renew_hour'                 => $certbot_auto_renew_hour,
-      'certbot_auto_renew_minute'               => $certbot_auto_renew_minute,
-      'certbot_auto_renew_options'              => $certbot_auto_renew_options,
-      'certbot_testmode'                        => $certbot_testmode,
-      'certbot_hsts'                            => $certbot_hsts,
-      'certbot_create_if_missing'               => $certbot_create_if_missing,
-      'certbot_create_method'                   => $certbot_create_method,
-      'certbot_create_extra_args'               => $certbot_create_extra_args,
-      'certbot_admin_email'                     => $certbot_admin_email,
-      'certbot_expand'                          => $certbot_expand,
-      'certbot_webroot'                         => $certbot_webroot,
-      'certbot_certs'                           => $certbot_certs,
-      'certbot_create_command'                  => $certbot_create_command,
-      'certbot_create_standalone_stop_services' => $certbot_create_standalone_stop_services,
-      'certbot_install_method'                  => $certbot_install_method,
-      'certbot_repo'                            => $certbot_repo,
-      'certbot_version'                         => $certbot_version,
-      'certbot_keep_updated'                    => $certbot_keep_updated,
-      'certbot_dir'                             => $certbot_dir,
-    },
-    tags          => $par_tags,
-    skip_tags     => $par_skip_tags,
-    start_at_task => $par_start_at_task,
-    limit         => $par_limit,
-    verbose       => $par_verbose,
-    check_mode    => $par_check_mode,
-    timeout       => $par_timeout,
-    user          => $par_user,
-    env_vars      => $par_env_vars,
-    logoutput     => $par_logoutput,
-    exclusive     => $par_exclusive,
-  }
+par { 'paw_ansible_role_certbot-main':
+  ensure        => present,
+  playbook      => $playbook_path,
+  playbook_vars => {
+        'ansible_managed' => $ansible_managed,
+        'item' => $item,
+        'certbot_auto_renew' => $certbot_auto_renew,
+        'certbot_auto_renew_user' => $certbot_auto_renew_user,
+        'certbot_auto_renew_hour' => $certbot_auto_renew_hour,
+        'certbot_auto_renew_minute' => $certbot_auto_renew_minute,
+        'certbot_auto_renew_options' => $certbot_auto_renew_options,
+        'certbot_testmode' => $certbot_testmode,
+        'certbot_hsts' => $certbot_hsts,
+        'certbot_create_if_missing' => $certbot_create_if_missing,
+        'certbot_create_method' => $certbot_create_method,
+        'certbot_create_extra_args' => $certbot_create_extra_args,
+        'certbot_admin_email' => $certbot_admin_email,
+        'certbot_expand' => $certbot_expand,
+        'certbot_webroot' => $certbot_webroot,
+        'certbot_certs' => $certbot_certs,
+        'certbot_create_command' => $certbot_create_command,
+        'certbot_create_standalone_stop_services' => $certbot_create_standalone_stop_services,
+        'certbot_install_method' => $certbot_install_method,
+        'certbot_repo' => $certbot_repo,
+        'certbot_version' => $certbot_version,
+        'certbot_keep_updated' => $certbot_keep_updated,
+        'certbot_dir' => $certbot_dir
+              },
+  tags          => $par_tags,
+  skip_tags     => $par_skip_tags,
+  start_at_task => $par_start_at_task,
+  limit         => $par_limit,
+  verbose       => $par_verbose,
+  check_mode    => $par_check_mode,
+  timeout       => $par_timeout,
+  user          => $par_user,
+  env_vars      => $par_env_vars,
+  logoutput     => $par_logoutput,
+  exclusive     => $par_exclusive,
+}
 }
